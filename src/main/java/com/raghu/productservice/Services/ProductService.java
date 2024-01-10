@@ -1,6 +1,5 @@
 package com.raghu.productservice.Services;
 
-import com.raghu.productservice.DTOs.FakeStoreProductDto;
 import com.raghu.productservice.DTOs.GenericProductDto;
 import com.raghu.productservice.Exceptions.NotFoundException;
 

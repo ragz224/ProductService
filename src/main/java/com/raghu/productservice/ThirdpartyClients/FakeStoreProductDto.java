@@ -1,4 +1,4 @@
-package com.raghu.productservice.DTOs;
+package com.raghu.productservice.ThirdpartyClients;
 
 import com.raghu.productservice.Category;
 import lombok.Getter;
