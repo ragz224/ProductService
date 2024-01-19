@@ -6,6 +6,7 @@ import com.raghu.productservice.DTOs.GenericProductDto;
 import com.raghu.productservice.Exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +15,28 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Primary
 @Service("fakestoreproductservice")
 public class FakeStoreProductService implements ProductService{
     FakeStoreClient fakeStoreClient;
-    RestTemplateBuilder restTemplateBuilder;
+
 
     @Autowired
-    public FakeStoreProductService(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplateBuilder = restTemplateBuilder;
-    }
-    private String productUrl = "https://fakestoreapi.com/products/{id}";
-    private String productUrlforPost =  "https://fakestoreapi.com/products";
-    private String productUrlForUpdate = "https://fakestoreapi.com/products/{id}";
-    private String productUrlForAllProducts = "https://fakestoreapi.com/products";
+    public FakeStoreProductService( FakeStoreClient fakeStoreClient) {
 
-    private String productUrlForDeletingProduct = "https://fakestoreapi.com/products/{id}";
+        this.fakeStoreClient = fakeStoreClient;
+    }
+
 
 
 
     public GenericProductDto Insertingdata(FakeStoreProductDto fakeStoreProductDto) {
         GenericProductDto genericProductDto = new GenericProductDto();
-        genericProductDto.setId(fakeStoreProductDto.getId());
+        genericProductDto.setId(String.valueOf(fakeStoreProductDto.getId()));
         genericProductDto.setTitle(fakeStoreProductDto.getTitle());
-        genericProductDto.setCategory(fakeStoreProductDto.getCategory());
+//        genericProductDto.setCategory(fakeStoreProductDto.getCategory());
         genericProductDto.setDescription(fakeStoreProductDto.getDescription());
         genericProductDto.setImage(fakeStoreProductDto.getImage());
         genericProductDto.setPrice(fakeStoreProductDto.getPrice());
@@ -46,7 +45,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
 
-    @Override
+
     public GenericProductDto getProductById(Long id) throws NotFoundException {
 
             GenericProductDto genericProductDto = Insertingdata(fakeStoreClient.getProductById(id));
@@ -64,25 +63,18 @@ public class FakeStoreProductService implements ProductService{
 
 
 
-    @Override
+
     public GenericProductDto updateProductById(Long id, GenericProductDto updatedProductDto) {
 
-
         GenericProductDto genericProductDto1 =Insertingdata(fakeStoreClient.updateProductById(id,updatedProductDto));
-
         return genericProductDto1;
-
-
     }
 
 
-    @Override
+
         public List<GenericProductDto> getAllProducts() {
 
-
-
-
-            List<GenericProductDto> genericProductDtoList = new ArrayList<>();
+         List<GenericProductDto> genericProductDtoList = new ArrayList<>();
 
             for (FakeStoreProductDto fakeStoreProductDto : fakeStoreClient.getAllProducts()) {
                 GenericProductDto genericProductDto =Insertingdata(fakeStoreProductDto);
@@ -95,14 +87,25 @@ public class FakeStoreProductService implements ProductService{
 
         }
 
-    @Override
+
     public GenericProductDto DeleteProductById(Long id) {
 
         GenericProductDto genericProductDto = Insertingdata(fakeStoreClient.DeleteProductById(id));
         return genericProductDto;
-
-
     }
 
+    @Override
+    public GenericProductDto createProduct(GenericProductDto genericProductDto) {
+        return null;
+    }
 
+    @Override
+    public GenericProductDto getProductById(UUID uuid) {
+        return null;
+    }
+
+    @Override
+    public GenericProductDto UpdateProductById(UUID uuid, GenericProductDto genericProductDto) {
+        return null;
+    }
 }

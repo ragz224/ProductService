@@ -3,6 +3,7 @@ package com.raghu.productservice.ThirdpartyClients;
 import com.raghu.productservice.DTOs.GenericProductDto;
 import com.raghu.productservice.Exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -16,26 +17,40 @@ import java.util.List;
 @Component
 public class FakeStoreClient {
 
-        RestTemplateBuilder restTemplateBuilder;
+
+    @Value("${fakeStore.api.baseUrl}")
+    private String fakeStoreApiBaseUrl;
+
+    @Value("${fakestore.api.product}")
+    private String fakeStoreProductPath;
+
+    private final String productPath = "/products";
+
+
+    private String productUrl = fakeStoreApiBaseUrl + productPath + "/{id}";
+    private String getPostproductsUrl = fakeStoreApiBaseUrl + fakeStoreProductPath;
+    private RestTemplate restTemplate;
+    private RestTemplateBuilder restTemplateBuilder;
+
+
 
         @Autowired
-        public FakeStoreClient(RestTemplateBuilder restTemplateBuilder) {
+        public FakeStoreClient(RestTemplateBuilder restTemplateBuilder,
+                               @Value("${fakeStore.api.baseUrl}") String fakeStoreApiBaseUrl,
+                               @Value("${fakestore.api.product}") String fakeStoreProductPath) {
             this.restTemplateBuilder = restTemplateBuilder;
+            this.productUrl = fakeStoreApiBaseUrl + fakeStoreProductPath + "/{id}";
+            this.getPostproductsUrl = fakeStoreApiBaseUrl + fakeStoreProductPath;
         }
-        private String productUrl = "https://fakestoreapi.com/products/{id}";
-        private String productUrlforPost =  "https://fakestoreapi.com/products";
-        private String productUrlForUpdate = "https://fakestoreapi.com/products/{id}";
-        private String productUrlForAllProducts = "https://fakestoreapi.com/products";
 
-        private String productUrlForDeletingProduct = "https://fakestoreapi.com/products/{id}";
 
 
 
         public GenericProductDto Insertingdata(FakeStoreProductDto fakeStoreProductDto) {
             GenericProductDto genericProductDto = new GenericProductDto();
-            genericProductDto.setId(fakeStoreProductDto.getId());
+            genericProductDto.setId(String.valueOf(fakeStoreProductDto.getId()));
             genericProductDto.setTitle(fakeStoreProductDto.getTitle());
-            genericProductDto.setCategory(fakeStoreProductDto.getCategory());
+//            genericProductDto.setCategory(fakeStoreProductDto.getCategory());
             genericProductDto.setDescription(fakeStoreProductDto.getDescription());
             genericProductDto.setImage(fakeStoreProductDto.getImage());
             genericProductDto.setPrice(fakeStoreProductDto.getPrice());
@@ -48,8 +63,8 @@ public class FakeStoreClient {
         public FakeStoreProductDto getProductById(Long id) throws NotFoundException {
             RestTemplate restTemplate = restTemplateBuilder.build();
 
-            ResponseEntity<FakeStoreProductDto> response = restTemplate.getForEntity(productUrl,
-                    FakeStoreProductDto.class, id);
+             ResponseEntity<FakeStoreProductDto> response = restTemplate.getForEntity(productUrl,
+                     FakeStoreProductDto.class, id);
 
             FakeStoreProductDto fakeStoreProductDto = response.getBody();
 
@@ -67,7 +82,7 @@ public class FakeStoreClient {
         public FakeStoreProductDto uploadProduct(GenericProductDto genericProductDto) {
             RestTemplate restTemplate = restTemplateBuilder.build();
             ResponseEntity<FakeStoreProductDto> response =
-                    restTemplate.postForEntity(productUrlforPost,genericProductDto,FakeStoreProductDto.class);
+                    restTemplate.postForEntity(getPostproductsUrl,genericProductDto,FakeStoreProductDto.class);
 
             FakeStoreProductDto fakeStoreProductDto = response.getBody();
 
@@ -85,7 +100,7 @@ public class FakeStoreClient {
 
             ResponseEntity<FakeStoreProductDto> response =
                     restTemplate.exchange(
-                            productUrlForUpdate,
+                            productUrl,
                             HttpMethod.PUT, requestEntity,FakeStoreProductDto.class,
                             id
                     );
@@ -102,7 +117,7 @@ public class FakeStoreClient {
         public List<FakeStoreProductDto> getAllProducts() {
             RestTemplate restTemplate = restTemplateBuilder.build();
 
-            ResponseEntity<FakeStoreProductDto[]> response = restTemplate.getForEntity(productUrlForAllProducts, FakeStoreProductDto[].class);
+            ResponseEntity<FakeStoreProductDto[]> response = restTemplate.getForEntity(getPostproductsUrl, FakeStoreProductDto[].class);
 
 
             FakeStoreProductDto[] fakeStoreProductDtoArray = response.getBody();
@@ -118,7 +133,7 @@ public class FakeStoreClient {
         public FakeStoreProductDto DeleteProductById(Long id) {
             RestTemplate restTemplate = restTemplateBuilder.build();
 
-            ResponseEntity<FakeStoreProductDto> response =  restTemplate.exchange(productUrlForDeletingProduct, HttpMethod.DELETE,null, FakeStoreProductDto.class,id);
+            ResponseEntity<FakeStoreProductDto> response =  restTemplate.exchange(productUrl, HttpMethod.DELETE,null, FakeStoreProductDto.class,id);
 
             FakeStoreProductDto fakeStoreProductDto = response.getBody();
 
