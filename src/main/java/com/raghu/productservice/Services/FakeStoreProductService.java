@@ -100,12 +100,19 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto getProductById(UUID uuid) {
+    public GenericProductDto getProductById(String id) {
         return null;
     }
 
     @Override
-    public GenericProductDto UpdateProductById(UUID uuid, GenericProductDto genericProductDto) {
+    public GenericProductDto UpdateProductById( GenericProductDto genericProductDto, String id) {
         return null;
     }
+
+    @Override
+    public GenericProductDto deletProductById(String id) throws NotFoundException {
+        return null;
+    }
+
+
 }

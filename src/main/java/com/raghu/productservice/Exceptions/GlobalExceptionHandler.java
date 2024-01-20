@@ -15,4 +15,10 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler({InvalidCategoryException.class})
+    public ResponseEntity<ExceptionDto> handleNotFoundException(InvalidCategoryException invalidCategoryException) {
+        return new ResponseEntity<>( new ExceptionDto(HttpStatus.NOT_FOUND,invalidCategoryException.getMessage()),
+                HttpStatus.NOT_FOUND);
+    }
+
 }

@@ -10,11 +10,10 @@ import java.util.UUID;
 @Setter
 public class GenericProductDto {
     private String id;
-    private UUID uuid;
     private String title;
     private double price;
     private String description;
     private String image;
-    private Category category;
+    private String category;
 
 }

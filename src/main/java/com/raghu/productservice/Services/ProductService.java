@@ -1,6 +1,7 @@
 package com.raghu.productservice.Services;
 
 import com.raghu.productservice.DTOs.GenericProductDto;
+import com.raghu.productservice.Exceptions.InvalidCategoryException;
 import com.raghu.productservice.Exceptions.NotFoundException;
 import com.raghu.productservice.Exceptions.ProductNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,12 @@ public interface ProductService {
 //
 //    List<GenericProductDto> getAllProducts();
 
-    GenericProductDto createProduct(GenericProductDto genericProductDto);
-    GenericProductDto getProductById(UUID uuid) ;
+    GenericProductDto createProduct(GenericProductDto genericProductDto) throws InvalidCategoryException;
+    GenericProductDto getProductById(String id) ;
 
-    GenericProductDto UpdateProductById(UUID uuid, GenericProductDto genericProductDto) ;
+    GenericProductDto UpdateProductById( GenericProductDto genericProductDto, String id) throws NotFoundException;
+
+    GenericProductDto deletProductById(String id) throws NotFoundException;
 
 
 }

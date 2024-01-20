@@ -2,6 +2,7 @@ package com.raghu.productservice.Controllers;
 
 import com.raghu.productservice.DTOs.ExceptionDto;
 import com.raghu.productservice.DTOs.GenericProductDto;
+import com.raghu.productservice.Exceptions.InvalidCategoryException;
 import com.raghu.productservice.Exceptions.NotFoundException;
 import com.raghu.productservice.Exceptions.ProductNotFoundException;
 import com.raghu.productservice.Models.Product;
@@ -68,20 +69,25 @@ public class ProductController {
 
 
     @PostMapping()
-    public ResponseEntity<GenericProductDto> CreateProduct(@RequestBody GenericProductDto genericProductDto) {
+    public ResponseEntity<GenericProductDto> CreateProduct(@RequestBody GenericProductDto genericProductDto) throws InvalidCategoryException {
         return new ResponseEntity<>(productService.createProduct(genericProductDto),HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<GenericProductDto> GetProductById(@PathVariable("id") UUID uuid) {
-        return new ResponseEntity<>(productService.getProductById(uuid), HttpStatus.OK);
+    public ResponseEntity<GenericProductDto> GetProductById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<GenericProductDto> UpdateProductById(@PathVariable("id") UUID uuid,
-                                                               @RequestBody GenericProductDto genericProductDto) {
-        return new ResponseEntity<>(productService.UpdateProductById(uuid, genericProductDto),HttpStatus.OK);
+    public ResponseEntity<GenericProductDto> UpdateProductById(@PathVariable("id") String id,
+                                                               @RequestBody GenericProductDto genericProductDto) throws NotFoundException {
+        return new ResponseEntity<>(productService.UpdateProductById(genericProductDto, id),HttpStatus.OK);
 
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<GenericProductDto> deleteProductById(@PathVariable("id") String id ) throws NotFoundException {
+        return  new ResponseEntity<>(productService.deletProductById(id), HttpStatus.OK);
     }
 
 

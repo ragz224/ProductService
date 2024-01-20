@@ -1,6 +1,8 @@
 package com.raghu.productservice.Services;
 
 import com.raghu.productservice.DTOs.GenericProductDto;
+import com.raghu.productservice.Exceptions.InvalidCategoryException;
+import com.raghu.productservice.Exceptions.NotFoundException;
 import com.raghu.productservice.Exceptions.ProductNotFoundException;
 import com.raghu.productservice.Mappers.DTOMapper;
 import com.raghu.productservice.Models.Category;
@@ -27,46 +29,65 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public GenericProductDto createProduct(GenericProductDto genericProductDto) {
-        Category category = new Category();
-
+    public GenericProductDto createProduct(GenericProductDto genericProductDto) throws InvalidCategoryException {
 
         Product product = DTOMapper.GenericToProductDtoMapper(genericProductDto);
-        Optional<Category> Opscategory =  categoryRepo.findByName(genericProductDto.getCategory().getName());
-        if(Opscategory.isEmpty()) {
-            throw new RuntimeException();
+        String category = genericProductDto.getCategory();
+        if (category == null) {
+            throw new RuntimeException("Category not provided");
         }
-        Category savedCategory = Opscategory.get();
-        product.setCategory(savedCategory);
+        Optional<Category> Opscategory =  categoryRepo.findByName(genericProductDto.getCategory());
+        if(Opscategory.isEmpty()) {
+            throw new InvalidCategoryException("The category: " + genericProductDto.getCategory() + " doesn't exists.");
+        }
+        Category category1 = Opscategory.get();
+        product.setCategory(category1);
 
-        Product savedProduct =  productRepo.save(product);
+        Product savedProduct = productRepo.save(product);
 
         return DTOMapper.ProducttoGenericDtoMapper(savedProduct);
     }
 
     @Override
-    public GenericProductDto getProductById(UUID uuid) {
-        Product Savedproduct = productRepo.findById(uuid).get();
+    public GenericProductDto getProductById(String id) {
+        Product Savedproduct = productRepo.findById(UUID.fromString(id)).get();
         return DTOMapper.ProducttoGenericDtoMapper(Savedproduct);
     }
 
     @Override
-    public GenericProductDto UpdateProductById(UUID uuid, GenericProductDto genericProductDto) {
-        Optional<Product> Opsproduct = productRepo.findById(uuid);
+    public GenericProductDto UpdateProductById( GenericProductDto genericProductDto, String id) throws NotFoundException {
+        Optional<Product> Opsproduct = productRepo.findById(UUID.fromString(id));
+        if(Opsproduct.isEmpty()) {
+            throw new NotFoundException("Not found");
+        }
+        Product product = Opsproduct.get();
+        Optional<Category> OpsCategory = categoryRepo.findByName(genericProductDto.getCategory());
+        if(OpsCategory.isEmpty()) {
+            throw new NotFoundException("Not found");
+        }
+        Category category = OpsCategory.get();
 
-        Product savedProduct = Opsproduct.get();
-        savedProduct.setTitle(genericProductDto.getTitle());
-        savedProduct.setImage(genericProductDto.getImage());
-        savedProduct.setPrice(genericProductDto.getPrice());
-        savedProduct.setDescription(genericProductDto.getDescription());
-        savedProduct.setCategory(genericProductDto.getCategory());
-//
-//        Category category = genericProductDto.getCategory();
-//        savedProduct.setCategory(category);
-//
-//        category.getProduct().add(savedProduct);
+        product.setDescription(genericProductDto.getDescription());
+        product.setTitle(genericProductDto.getTitle());
+        product.setImage(genericProductDto.getImage());
+        product.setPrice(genericProductDto.getPrice());
+        product.setCategory(category);
+        Product savedProduct = productRepo.save(product);
 
-        return DTOMapper.ProducttoGenericDtoMapper(savedProduct);
+        return DTOMapper.ProducttoGenericDtoMapper(product);
+
+
+    }
+
+    public GenericProductDto deletProductById(String id) throws NotFoundException {
+        Optional<Product> opsProduct = productRepo.findById(UUID.fromString(id));
+        if(opsProduct.isEmpty()) {
+            throw new NotFoundException("Not found");
+        }
+        productRepo.deleteById(UUID.fromString(id));
+        Product product = opsProduct.get();
+        return DTOMapper.ProducttoGenericDtoMapper(product);
+
     }
 
 

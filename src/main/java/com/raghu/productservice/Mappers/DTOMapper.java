@@ -12,7 +12,6 @@ public class DTOMapper {
         if(genericProductDto.getId()!=null) {
             product.setUuid(UUID.fromString(genericProductDto.getId()));
         }
-        product.setUuid(genericProductDto.getUuid());
         product.setTitle(genericProductDto.getTitle());
         product.setPrice(genericProductDto.getPrice());
         product.setDescription(genericProductDto.getDescription());
@@ -24,9 +23,11 @@ public class DTOMapper {
 
     public static GenericProductDto ProducttoGenericDtoMapper(Product product) {
         GenericProductDto genericProductDto = new GenericProductDto();
+        if(product.getUuid()!=null) {
+            genericProductDto.setId(product.getUuid().toString());
+        }
         genericProductDto.setPrice(product.getPrice());
-        genericProductDto.setUuid(product.getUuid());
-        genericProductDto.setCategory(product.getCategory());
+        genericProductDto.setCategory(product.getCategory().getName());
         genericProductDto.setDescription(product.getDescription());
         genericProductDto.setImage(product.getImage());
         genericProductDto.setTitle(product.getTitle());
