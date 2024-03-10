@@ -53,7 +53,7 @@ public class FakeStoreClient {
 //            genericProductDto.setCategory(fakeStoreProductDto.getCategory());
             genericProductDto.setDescription(fakeStoreProductDto.getDescription());
             genericProductDto.setImage(fakeStoreProductDto.getImage());
-            genericProductDto.setPrice(fakeStoreProductDto.getPrice());
+//            genericProductDto.setPrice(fakeStoreProductDto.getPrice());
 
             return genericProductDto;
         }

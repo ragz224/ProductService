@@ -22,11 +22,17 @@ public interface ProductService {
 //    List<GenericProductDto> getAllProducts();
 
     GenericProductDto createProduct(GenericProductDto genericProductDto) throws InvalidCategoryException;
-    GenericProductDto getProductById(String id) ;
+    GenericProductDto getProductById(String id) throws NotFoundException;
 
     GenericProductDto UpdateProductById( GenericProductDto genericProductDto, String id) throws NotFoundException;
 
     GenericProductDto deletProductById(String id) throws NotFoundException;
+
+    List<GenericProductDto> getAllProducts();
+
+    List<GenericProductDto> getAllProductsByCategoryName(String name) throws InvalidCategoryException;
+
+    List<String> getAllCategories();
 
 
 }

@@ -1,6 +1,7 @@
 package com.raghu.productservice.DTOs;
 
 import com.raghu.productservice.Models.Category;
+import com.raghu.productservice.Models.Price;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 public class GenericProductDto {
     private String id;
     private String title;
-    private double price;
+    private String price;
     private String description;
     private String image;
     private String category;

@@ -13,7 +13,7 @@ public class DTOMapper {
             product.setUuid(UUID.fromString(genericProductDto.getId()));
         }
         product.setTitle(genericProductDto.getTitle());
-        product.setPrice(genericProductDto.getPrice());
+//        product.setPrice(genericProductDto.getPrice());
         product.setDescription(genericProductDto.getDescription());
         product.setImage(genericProductDto.getImage());
 
@@ -26,7 +26,10 @@ public class DTOMapper {
         if(product.getUuid()!=null) {
             genericProductDto.setId(product.getUuid().toString());
         }
-        genericProductDto.setPrice(product.getPrice());
+        else {
+            return null;
+        }
+        genericProductDto.setPrice(product.getPrice().getName());
         genericProductDto.setCategory(product.getCategory().getName());
         genericProductDto.setDescription(product.getDescription());
         genericProductDto.setImage(product.getImage());

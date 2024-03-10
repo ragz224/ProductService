@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Primary
+
 @Service("fakestoreproductservice")
 public class FakeStoreProductService implements ProductService{
     FakeStoreClient fakeStoreClient;
@@ -39,7 +39,7 @@ public class FakeStoreProductService implements ProductService{
 //        genericProductDto.setCategory(fakeStoreProductDto.getCategory());
         genericProductDto.setDescription(fakeStoreProductDto.getDescription());
         genericProductDto.setImage(fakeStoreProductDto.getImage());
-        genericProductDto.setPrice(fakeStoreProductDto.getPrice());
+//        genericProductDto.setPrice(fakeStoreProductDto.getPrice());
 
         return genericProductDto;
     }
@@ -114,5 +114,13 @@ public class FakeStoreProductService implements ProductService{
         return null;
     }
 
+    @Override
+    public List<GenericProductDto> getAllProductsByCategoryName(String name) {
+        return null;
+    }
 
+    @Override
+    public List<String> getAllCategories() {
+        return null;
+    }
 }
