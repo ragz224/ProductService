@@ -15,6 +15,8 @@ import java.security.PrivateKey;
 @Setter
 @Entity
 public class Product extends BaseModel {
+//    private int id;
+    private String product_id;
     private String title;
     private String description;
     private String image;

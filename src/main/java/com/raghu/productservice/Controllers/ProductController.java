@@ -80,7 +80,8 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public GenericProductDto GetProductById(@PathVariable("id") String id, @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken) throws NotFoundException {
+    public GenericProductDto GetProductById(@PathVariable("id") String id) throws NotFoundException {
+//        , @RequestHeader(HttpHeaders.AUTHORIZATION) String authToken
 
         System.out.println("going from controller");
         System.out.println("yes it is");
